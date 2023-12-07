@@ -1,0 +1,47 @@
+<h1 class="videos-heading">Dataset of climbing performances</h1>
+
+<div class="select-container">
+  <label for="climberSelect">Select Climber:</label>
+  <select id="climberSelect" [(ngModel)]="climberID_1" (change)="updatePageNumber(1)">
+    <option *ngFor="let climber of climbers" [value]="climber.ID">{{climber.name}}</option>
+  </select>
+</div>
+
+<div class="select-container">
+  <label for="dateSelect">Select Date:</label>
+  <select id="dateSelect" [(ngModel)]="date_1" #dateSelect (change)="updatePageNumber(1)">
+    <option *ngFor="let date of dates" [value]="utils.getLocalDateForFilter(date.date)">{{utils.getLocalDateForFilter(date.date) }}</option>
+  </select>
+</div>
+
+<div class="videos-grid uk-child-width-1-4@m" uk-grid>
+  <div *ngFor="let climbRun of videos | climberFilter: climberID_1 | dateFilter: date_1 | paginate: { itemsPerPage: 12, currentPage: page_1 }">
+    <div class="uk-card uk-card-default">
+      <div class="uk-card-media-top">
+        <video class="video-element" controls loop [src]="'assets/videos/' + climbRun.title + '.mp4'" width="auto" height="auto" alt=""></video>
+      </div>
+      <div class="uk-section uk-section-muted">
+        <div class="uk-container">
+          <a [routerLink]="['/video', climbRun.ID]" [queryParams]="addQueryParams()">
+            <div class="uk-grid-match uk-child-width-1-2@m" uk-grid>
+              <div class="video-details">
+                <div>Climber</div>
+                <div>Run Date</div>
+                <div>Attempt</div>
+                <div>Duration</div>
+              </div>
+              <div class="video-details">
+                <div><b>{{ climbRun.climber_name }}</b></div>
+                <div><b>{{ utils.getLocalDate(climbRun.date) }}</b></div>
+                <div><b>{{ climbRun.attempt }}</b></div>
+                <div><b>{{ climbRun.time }} s</b></div>
+              </div>
+            </div>
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<pagination-controls class="pagination-controls" (pageChange)="updatePageNumber($event)"></pagination-controls>

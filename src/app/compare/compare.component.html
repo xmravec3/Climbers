@@ -1,0 +1,77 @@
+<div uk-grid>
+  <div class="uk-width-auto">
+    <a routerLink="/videos" [queryParams]="addQueryParams()">
+      <button class="uk-button uk-button-primary uk-button-large">Dataset of videos</button>
+    </a>
+  </div>
+  <div class="uk-width-expand">
+    <h1 class="compare-heading">Comparison of climbing performances</h1>
+  </div>
+</div>
+
+<div class="compare-container uk-card uk-card-default uk-grid-collapse uk-child-width-1-3@s uk-margin" uk-grid>
+  <div class="attempt-details" id="left_attempt">
+    <div class="uk-card-media-left uk-cover-container">
+        <video id="video_left" class="video-element videoLeft" [src]="'assets/videos/' + l_attempt.title + '.mp4'"></video>
+    </div>
+    <a routerLink="/video/{{l_attempt.ID}}" [queryParams]="addQueryParams()">
+      <div class="uk-card-body">
+        <h3 class="uk-card-title">Basic Data</h3>
+        <div>Climber Name: {{ l_attempt.climber_name }}</div>
+        <div>Date: {{ utils.getLocalDate(l_attempt.date) }}</div>
+        <div>Number of Run: {{ l_attempt.attempt }}</div>
+        <div>URL for Video: <a href="{{ l_attempt.url }}">{{ l_attempt.url }}</a></div>
+        <div>Start in Seconds from Video: {{ l_attempt.start }}</div>
+        <div>End in Seconds from Video: {{ l_attempt.end }}</div>
+        <div>Duration in Seconds: {{ l_attempt.time }}</div>
+        <div>Time Frames: {{ l_attempt.frames }}</div>
+        <div>Side from Competition: {{ utils.getSideText(l_attempt.side) }}</div>
+        <div>Record Name: {{ l_attempt.video_name }}</div>
+      </div>
+    </a>
+  </div>
+
+  <div class="chart-container" id="chart_compareNoData" [hidden]="chart_data">Wait a moment, data is loading.</div>
+  <div class="chart-container" id="chart_compare" [hidden]="!chart_data">
+    <p uk-margin>
+      <button class="uk-button uk-button-primary uk-button-small btn" [disabled]="isRunningComparison" (click)="add()">Run</button>
+    </p>
+    <!-- CHART -->
+    <div class="canvas-container-legend divChartLegend">
+      <canvas class="canvas-legend" id="myCanvas"></canvas>
+    </div>
+
+    <div class="canvas-container divChart">
+      <canvas class="canvas-element" id="canvas">{{ chart }}</canvas>
+    </div>
+
+    <div class="canvas-container-legend divChartLegend">
+      <canvas class="canvas-legend" id="myCanvas_2"></canvas>
+    </div>
+
+    <div class="canvas-container-description divChartLegendDelayData">
+      <canvas class="canvas-element-description canvasDelayData" id="myCanvas_3"></canvas>
+    </div>
+  </div>
+
+  <div class="attempt-details" id="right_attempt">
+    <div class="uk-card-media-left uk-cover-container">
+        <video id="video_right" class="video-element videoRight" [src]="'assets/videos/' + r_attempt.title + '.mp4'"></video>
+    </div>
+    <a routerLink="/video/{{r_attempt.ID}}" [queryParams]="addQueryParams()">
+      <div class="uk-card-body">
+        <h3 class="uk-card-title">Basic Data</h3>
+        <div>Climber Name: {{ r_attempt.climber_name }}</div>
+        <div>Date: {{ utils.getLocalDate(r_attempt.date) }}</div>
+        <div>Number of Run: {{ r_attempt.attempt }}</div>
+        <div>URL for Video: <a href="{{ r_attempt.url }}">{{ r_attempt.url }}</a></div>
+        <div>Start in Seconds from Video: {{ r_attempt.start }}</div>
+        <div>End in Seconds from Video: {{ r_attempt.end }}</div>
+        <div>Duration in Seconds: {{ r_attempt.time }}</div>
+        <div>Time Frames: {{ r_attempt.frames }}</div>
+        <div>Side from Competition: {{ utils.getSideText(r_attempt.side) }}</div>
+        <div>Record Name: {{ r_attempt.video_name }}</div>
+      </div>
+    </a>
+  </div>
+</div>

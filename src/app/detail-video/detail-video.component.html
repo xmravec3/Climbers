@@ -1,0 +1,87 @@
+<div uk-grid>
+  <div class="uk-width-auto">
+    <a routerLink="/videos" [queryParams]="addQueryParams()">
+      <button class="uk-button uk-button-primary uk-button-large">Dataset of videos</button>
+    </a>
+  </div>
+  <div class="uk-width-expand">
+    <h1 class="detail-heading">Climbing performance detail</h1>
+  </div>
+</div>
+
+<div class="uk-card uk-card-default uk-grid-collapse uk-child-width-1-2@s uk-margin" uk-grid [id]="id">
+  <div class="uk-card-media-left uk-cover-container">
+    <video class="video-element" controls loop [src]="'assets/videos/' + attempt.title + '.mp4'" width="600" height="400" alt=""></video>
+  </div>
+  <div>
+    <div class="uk-card-body">
+      <h3 class="uk-card-title">Basic Data</h3>
+      <div>Climber Name: {{ attempt.climber_name }}</div>
+      <div>Date: {{ utils.getLocalDate(attempt.date) }}</div>
+      <div>Number of Run: {{ attempt.attempt }}</div>
+      <div>URL for Video: <a href="{{ attempt.url }}">{{ attempt.url }}</a></div>
+      <div>Start in Seconds from Video: {{ attempt.start }}</div>
+      <div>End in Seconds from Video: {{ attempt.end }}</div>
+      <div>Duration in Seconds: {{ attempt.time }}</div>
+      <div>Time Frames: {{ attempt.frames }}</div>
+      <div>Side from Competition: {{ utils.getSideText(attempt.side) }}</div>
+      <div>Record Name: {{ attempt.video_name }}</div>
+    </div>
+  </div>
+</div>
+
+<h2 class="similiar-videos-heading">Similar climbing performances</h2>
+
+<div id="loadingData" [hidden]="similiarVideos">Wait a moment, data is loading.</div>
+<div [hidden]="!similiarVideos">
+  <div class="select-container" id="climber_2">
+    <label for="climberSelect">Select Climber:</label>
+    <select id="climberSelect" [(ngModel)]="climberID_2" (change)="updatePageNumber(1)">
+      <option *ngFor="let climber of climbers" [value]="climber.ID">{{climber.name}}</option>
+    </select>
+  </div>
+
+  <div class="select-container" id="date_2">
+    <label for="dateSelect">Select Date:</label>
+    <select id="dateSelect" [(ngModel)]="date_2" #dateSelect (change)="updatePageNumber(1)">
+      <option *ngFor="let date of dates" [value]="utils.getLocalDateForFilter(date.date)">{{utils.getLocalDateForFilter(date.date) }}</option>
+    </select>
+  </div>
+
+  <div *ngFor="let attempt of similiarVideos | climberFilter: climberID_2 | dateFilter: date_2 | paginate: { itemsPerPage: 5, currentPage: page_2 }">
+    <div class="uk-card uk-card-default uk-grid-collapse uk-child-width-1-2@s uk-margin" uk-grid>
+      <div class="uk-card-media-small uk-cover-container">
+        <video class="video-element" controls loop [src]="'assets/videos/' + attempt.video_path" width="200" height="150" alt=""></video>
+      </div>
+      <div class="uk-card-body">
+        <div class="uk-container">
+          <a routerLink="/compare/l_id/{{ id }}/r_id/{{ attempt.ID }}" [queryParams]="addQueryParams()">
+            <div class="uk-grid-match uk-child-width-1-2@m" uk-grid>
+              <div class="video-details">
+                <div>Distance</div>
+                <div>Climber</div>
+                <div>Run Date</div>
+                <div>Attempt</div>
+                <div>Duration</div>
+              </div>
+              <div class="video-details">
+                <div><b>{{ attempt.dist }}</b></div>
+                <div><b>{{ attempt.climber_name }}</b></div>
+                <div><b>{{ utils.getLocalDate(attempt.date) }}</b></div>
+                <div><b>{{ attempt.attempt }}</b></div>
+                <div><b>{{ attempt.time }} s</b></div>
+              </div>
+            </div>
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <ng-container *ngIf="similiarVideos">
+    <div class="pagination-controls">
+      <!--<pagination-controls (pageChange)="updatePageNumber($event)"></pagination-controls>-->
+      <pagination-controls class="pagination-controls" (pageChange)="updatePageNumber($event)"></pagination-controls>
+    </div>
+  </ng-container>
+</div>
