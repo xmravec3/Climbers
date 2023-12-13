@@ -225,7 +225,7 @@ export class CompareComponent implements OnInit, AfterViewInit{
       ctx_2.fillText('speed difference', 140, 20);
       ctx_2.save();
 
-      await this.timer(35); // 30
+      await this.timer(37);
       //this.chart.update();
       if (i == maxLength - 1) { this.isRunningComparison = false; }
     }
